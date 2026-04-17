@@ -96,6 +96,6 @@ class CompaniesController extends Controller
     {
         $companies->delete();
 
-        return redirect('companies.index');
+        return redirect('/companies');
     }
 }

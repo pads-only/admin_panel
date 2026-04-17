@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompaniesController;
+use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,9 +26,15 @@ Route::get('/companies/{companies}/edit', [CompaniesController::class, 'edit'])-
 
 // companies routes end
 
-Route::get('/employees', function () {
-    return view('employees');
-})->middleware(['auth', 'verified'])->name('employees');
+// employee routes start
+Route::get('/employees', [EmployeesController::class, 'index'])->middleware(['auth', 'verified'])->name('employees.index');
+Route::get('/employees/create', [EmployeesController::class, 'create'])->middleware(['auth', 'verified'])->name('employees.create');
+Route::post('/employees', [EmployeesController::class, 'store'])->middleware(['auth', 'verified'])->name('employees.store');
+Route::get('/employees/{employees}', [EmployeesController::class, 'show'])->middleware(['auth', 'verified'])->name('employees.show');
+Route::get('/employees/{employees}/edit', [EmployeesController::class, 'edit'])->middleware(['auth', 'verified'])->name('employees.edit');
+Route::patch('/employees/{employees}', [EmployeesController::class, 'update'])->middleware(['auth', 'verified'])->name('employees.update');
+Route::delete('/employees/{employees}', [EmployeesController::class, 'destroy'])->middleware(['auth', 'verified'])->name('employees.destroy');
+// employee routes end
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
