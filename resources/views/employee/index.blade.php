@@ -25,8 +25,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @foreach ($employees as $employee)
-                            <tr class="border-t">
+                        @forelse ($employees as $employee)
+                            <tr class="border-t border-gray-600">
                                 <td class="py-3 px-4">{{$employee->first_name}}</td>
                                 <td class="py-3 px-4">{{$employee->last_name}}</td>
                                 <td class="py-3 px-4">{{$employee->companies->name}}</td>
@@ -45,11 +45,17 @@
                                 </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td class="py-3 px-4">{{__("No employees found")}}</td>
+                            </tr>
+                        @endforelse
                 </table>
-                <div class="dark:bg-gray-900 p-4 border-t border-gray-200">
+                @if ($employees->links())    
+                <div class="dark:bg-gray-900 p-4 border-t border-gray-600">
                     {{$employees->links()}}
                 </div>
+                @endif
             </div>
         </div>
     </div>

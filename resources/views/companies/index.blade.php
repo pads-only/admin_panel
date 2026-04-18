@@ -23,7 +23,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @foreach ($companies as $company)
+                        @forelse ($companies as $company)
                             <tr class="border-t">
                                 <td class="py-3 px-4">{{$company->name}}</td>
                                 <td class="py-3 px-4">{{$company->email}}</td>
@@ -41,11 +41,15 @@
                                 </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td class="py-3 px-4">{{__("No companies found")}}</td>
+                            </tr>
+                        @endforelse
                 </table>
-                <div class="dark:bg-gray-900 p-4 border-t border-gray-200">
-                    {{$companies->links()}}
-                </div>
+                 <div class="dark:bg-gray-900 p-4 border-t border-gray-600">
+                     {{$companies->links()}}
+                 </div>
             </div>
         </div>
     </div>
