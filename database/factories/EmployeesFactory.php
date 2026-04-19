@@ -23,7 +23,7 @@ class EmployeesFactory extends Factory
             'last_name' => fake()->lastName(),
             'companies_id' => Companies::factory(),
             'email' => fake()->email(),
-            'phone' => fake()->phoneNumber()
+            'phone' => fake()->phoneNumber(),
         ];
     }
 }

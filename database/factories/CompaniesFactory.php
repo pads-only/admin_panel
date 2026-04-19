@@ -21,7 +21,7 @@ class CompaniesFactory extends Factory
             'name' => fake()->company(),
             'email' => fake()->companyEmail(),
             'logo' => fake()->imageUrl(),
-            'website' => fake()->url()
+            'website' => fake()->url(),
         ];
     }
 }

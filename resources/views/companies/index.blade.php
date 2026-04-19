@@ -13,6 +13,11 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-4">
+                @foreach (['success', 'error'] as $item)
+                    @if(session($item))
+                        <x-session-message.success :theme="$item">{{session($item)}}</x-session-message.success>
+                    @endif
+                @endforeach
                 <table class="min-w-full w-full dark:text-gray-200 rounded-lg p-4">
                     <thead class="dark:bg-gray-900">
                     <tr>
