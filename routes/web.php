@@ -13,7 +13,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-//companies routes
+// companies routes
 
 Route::get('/companies', [CompaniesController::class, 'index'])->middleware(['auth', 'verified'])->name('companies.index');
 Route::post('/companies', [CompaniesController::class, 'store'])->middleware(['auth', 'verified'])->name('companies.store');
@@ -22,7 +22,6 @@ Route::get('/companies/create', [CompaniesController::class, 'create'])->middlew
 Route::get('/companies/{companies}', [CompaniesController::class, 'show'])->middleware(['auth', 'verified'])->name('companies.show');
 Route::delete('/companies/{companies}', [CompaniesController::class, 'destroy'])->middleware(['auth', 'verified'])->name('companies.destroy');
 Route::get('/companies/{companies}/edit', [CompaniesController::class, 'edit'])->middleware(['auth', 'verified'])->name('companies.edit');
-
 
 // companies routes end
 
@@ -42,4 +41,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

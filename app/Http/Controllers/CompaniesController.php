@@ -15,11 +15,10 @@ class CompaniesController extends Controller
         return view('companies.index', ['companies' => $companies]);
     }
 
-
     public function create(Request $request)
     {
         return view('companies.create');
-        //validate
+        // validate
 
     }
 
@@ -35,45 +34,45 @@ class CompaniesController extends Controller
 
     public function store(Request $request)
     {
-        //validate
+        // validate
         $validatedAttributes = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'logo' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
-            'website' => 'required'
+            'website' => 'required',
         ]);
 
-        //move image to storage/app/public/images
+        // move image to storage/app/public/images
         if (! $request->hasFile('logo')) {
             throw ValidationException::withMessages(['logo' => 'Invalid Image']);
         }
 
         $path = $request->file('logo')->store('images', 'public');
 
-        //store in db
+        // store in db
         Companies::create([
             'name' => $validatedAttributes['name'],
             'email' => $validatedAttributes['email'],
             'logo' => $path,
-            'website' => $validatedAttributes['website']
+            'website' => $validatedAttributes['website'],
         ]);
 
         // dd($validatedAttributes);
-        return redirect('/companies');
+        return redirect('/companies')->with('success', 'New company has been added successfully!');
     }
 
     public function update(Request $request, Companies $companies)
     {
         // dd($companies);
-        //validate
+        // validate
         $validatedAttributes = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'logo' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
-            'website' => 'required'
+            'website' => 'required',
         ]);
 
-        //move image to storage/app/public/images
+        // move image to storage/app/public/images
         if (! $request->hasFile('logo')) {
             throw ValidationException::withMessages(['logo' => 'Invalid Image']);
         }
@@ -85,17 +84,17 @@ class CompaniesController extends Controller
             'name' => $validatedAttributes['name'],
             'email' => $validatedAttributes['email'],
             'logo' => $path,
-            'website' => $validatedAttributes['website']
+            'website' => $validatedAttributes['website'],
         ]);
 
         // // dd($validatedAttributes);
-        return redirect('/companies/' . $companies->id);
+        return redirect('/companies/' . $companies->id)->with('success', 'Company detail has been updated!');
     }
 
     public function destroy(Companies $companies)
     {
         $companies->delete();
 
-        return redirect('/companies');
+        return redirect('/companies')->with('error', 'Company has been deleted successfully!');
     }
 }

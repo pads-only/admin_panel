@@ -5,43 +5,43 @@ namespace Tests\Feature;
 use App\Models\Companies;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CompaniesTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
     use RefreshDatabase;
+
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = $this->createUser();
+    }
 
     public function test_that_company_page_contains_empty_table(): void
     {
-        //arrange
-        $user = User::factory()->create();
-        //act
-        $response = $this
-            ->actingAs($user)
-            ->get('/companies');
-        //assert
+        // arrang
+        // act
+        $response = $this->actingAs($this->user)->get('/companies');
+        // assert
         $response->assertOk();
 
-        $response->assertSee(__("No companies found"));
+        $response->assertSee(__('No companies found'));
     }
 
     public function test_that_company_page_contains_not_empty_table(): void
     {
-        //factory arrange
+        // factory arrange
         $companies = Companies::factory()->create();
 
-        $user = User::factory()->create();
-
         // act
-        $response = $this->actingAs($user)->get('/companies');
+        $response = $this->actingAs($this->user)->get('/companies');
 
         $response->assertOk();
 
-        $response->assertDontSee(__("No companies found"));
+        $response->assertDontSee(__('No companies found'));
 
         $response->assertViewHas('companies', function ($collection) use ($companies) {
             return $collection->contains($companies);
@@ -52,27 +52,23 @@ class CompaniesTest extends TestCase
     {
         Companies::factory()->create();
 
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get('/companies/1');
+        $response = $this->actingAs($this->user)->get('/companies/1');
 
         $response->assertOk();
     }
 
     public function test_show_page_contain_company_not_found(): void
-    {
-        $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/companies/1');
+    {
+        $response = $this->actingAs($this->user)->get('/companies/1');
 
         $response->assertNotFound();
     }
 
     public function test_company_create_page(): void
-    {
-        $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/companies/create');
+    {
+        $response = $this->actingAs($this->user)->get('/companies/create');
 
         $response->assertOk();
     }
@@ -81,18 +77,14 @@ class CompaniesTest extends TestCase
     {
         Companies::factory()->create();
 
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get('/companies/1/edit');
+        $response = $this->actingAs($this->user)->get('/companies/1/edit');
 
         $response->assertOk();
     }
 
     public function test_company_edit_page_not_found_id(): void
     {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get('/companies/1/edit');
+        $response = $this->actingAs($this->user)->get('/companies/1/edit');
 
         $response->assertNotFound();
     }
@@ -102,5 +94,50 @@ class CompaniesTest extends TestCase
         $response = $this->get('/companies');
 
         $response->assertRedirect('/login');
+    }
+
+    public function test_login_redirect_to_dashboard(): void
+    {
+
+        User::create([
+            'name' => 'user',
+            'email' => 'user@user.com',
+            'is_admin' => false,
+            'password' => bcrypt('password'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'user@user.com',
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('dashboard');
+    }
+
+    // public function test_create_company_successful(): void
+    // {
+    //     // $company = [
+    //     //     'name' => 'onlypads limited',
+    //     //     'email' => 'onlypads@example.com',
+    //     //     'logo' => 'image.png',
+    //     //     'website' => 'onlypads.com'
+    //     // ];
+    //     $company = Companies::factory()->create();
+
+    //     $company = $company->first();
+
+    //     $response = $this->actingAs($this->user)->post('/companies', [$company]);
+
+    //     $response->assertStatus(302);
+    //     $response->assertRedirect('companies');
+
+    //     $response->assertDataseHas('companies', $company);
+    // }
+
+
+    protected function createUser(): User
+    {
+        return User::factory()->create();
     }
 }

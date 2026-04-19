@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Companies;
 use App\Models\Employees;
 use Illuminate\Http\Request;
-use Symfony\Component\ErrorHandler\Error\UndefinedFunctionError;
 
 class EmployeesController extends Controller
 {
@@ -41,11 +40,11 @@ class EmployeesController extends Controller
             'phone' => 'required',
         ]);
 
-        //save to db
-        Employees::create($validateAttributes);
+        // save to db
+        Employees::create($request->all());
 
-        //redirect to index
-        return redirect('/employees');
+        // redirect to index
+        return redirect('/employees')->with('success', 'Employee has been added successfully!');
     }
 
     public function update(Request $request, Employees $employees)
@@ -60,13 +59,13 @@ class EmployeesController extends Controller
 
         $employees->update($validateAttributes);
 
-        return redirect('/employees/' . $employees->id);
+        return redirect('/employees/' . $employees->id)->with('success', 'Employee details has been updated!');
     }
 
     public function destroy(Employees $employees)
     {
         $employees->delete();
 
-        return redirect('/employees');
+        return redirect('/employees')->with('error', 'Company has been deleted successfully!');
     }
 }
