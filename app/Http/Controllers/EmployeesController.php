@@ -40,10 +40,8 @@ class EmployeesController extends Controller
             'phone' => 'required',
         ]);
 
-        // save to db
-        Employees::create($request->all());
+        Employees::create($validateAttributes);
 
-        // redirect to index
         return redirect('/employees')->with('success', 'Employee has been added successfully!');
     }
 

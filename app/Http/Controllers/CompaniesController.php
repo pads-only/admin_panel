@@ -15,11 +15,9 @@ class CompaniesController extends Controller
         return view('companies.index', ['companies' => $companies]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
         return view('companies.create');
-        // validate
-
     }
 
     public function show(Companies $companies)
@@ -34,7 +32,6 @@ class CompaniesController extends Controller
 
     public function store(Request $request)
     {
-        // validate
         $validatedAttributes = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
@@ -42,14 +39,12 @@ class CompaniesController extends Controller
             'website' => 'required',
         ]);
 
-        // move image to storage/app/public/images
         if (! $request->hasFile('logo')) {
             throw ValidationException::withMessages(['logo' => 'Invalid Image']);
         }
 
         $path = $request->file('logo')->store('images', 'public');
 
-        // store in db
         Companies::create([
             'name' => $validatedAttributes['name'],
             'email' => $validatedAttributes['email'],
@@ -57,14 +52,11 @@ class CompaniesController extends Controller
             'website' => $validatedAttributes['website'],
         ]);
 
-        // dd($validatedAttributes);
         return redirect('/companies')->with('success', 'New company has been added successfully!');
     }
 
     public function update(Request $request, Companies $companies)
     {
-        // dd($companies);
-        // validate
         $validatedAttributes = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
@@ -72,14 +64,12 @@ class CompaniesController extends Controller
             'website' => 'required',
         ]);
 
-        // move image to storage/app/public/images
         if (! $request->hasFile('logo')) {
             throw ValidationException::withMessages(['logo' => 'Invalid Image']);
         }
 
         $path = $request->file('logo')->store('images', 'public');
 
-        // //store in db
         $companies->update([
             'name' => $validatedAttributes['name'],
             'email' => $validatedAttributes['email'],
@@ -87,7 +77,6 @@ class CompaniesController extends Controller
             'website' => $validatedAttributes['website'],
         ]);
 
-        // // dd($validatedAttributes);
         return redirect('/companies/' . $companies->id)->with('success', 'Company detail has been updated!');
     }
 
