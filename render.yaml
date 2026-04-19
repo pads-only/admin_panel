@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: admin-panel
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
